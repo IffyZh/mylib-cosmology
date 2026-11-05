@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+.venv/
+venv/
+env/
+
+build/
+dist/
+
+# Local Cobaya and MCMC outputs
+rslts/
+chains/
+*.checkpoint
+*.progress
+*.covmat
+*.minimum
+*.updated.yaml
+*.input.yaml
+
+.vscode/
+.idea/
+.DS_Store
