@@ -56,6 +56,28 @@ rho_lambda = model.Rho_L(a)
 
 ## Implemented models
 
+### Effective equations of state for LIDE
+
+The methods below accept a scale factor `a` (scalar or array-like).
+For redshift input, first set `a = 1 / (1 + z)`.
+
+```python
+w_c_eff = model.w_eff_dm(a)       # -xi_2 - xi_1*rho_L/rho_dm
+w_L_eff = model.w_eff_L(a)        # w + xi_1 + xi_2*rho_dm/rho_L
+w_rec = model.w_eff_rec(a)       # reference Omega_c0_bar defaults to 0.3
+w_rec = model.w_eff_rec(a, dm0=0.25)
+```
+
+The first two methods absorb the interaction into each component's
+continuity equation. The third matches the background to a noninteracting
+model with standard CDM density `dm0 * model.rho_crit * a**(-3)` and returns
+`model.w * rho_L / (rho_dm + rho_L - dm0 * model.rho_crit * a**(-3))`.
+For interacting vacuum (`omega=-1`), its numerator is `-rho_L`.
+Here `dm0` is a dimensionless present-day **CDM** density parameter,
+excluding baryons; it is independent of `O_m0` and `model.Omega_dm0`.
+Zero denominators produce NumPy `inf`/`nan`; plotting code should break
+curves at these singularities.
+
 - Flat $\Lambda$CDM background evolution
 - CPL background evolution
 - Linear interacting dark energy with

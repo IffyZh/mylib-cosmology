@@ -319,6 +319,34 @@ class LIDE(FlatLCDM):
             ans = self._rho_L_case2(a);
         return ans
     
+    def w_eff_dm(self, a):
+        """CDM component effective EOS, -Q/(3 H rho_dm).
+        """
+        a = np.asarray(a, dtype=float)
+        return -self.k2 - self.k1*self.Rho_L(a)/self.Rho_dm(a)
+
+    def w_eff_L(self, a):
+        """DE component effective EOS, w + Q/(3 H rho_L).
+        """
+        a = np.asarray(a, dtype=float)
+        return self.w + self.k1 + self.k2*self.Rho_dm(a)/self.Rho_L(a)
+
+    def w_eff_rec(self, a, dm0=0.3):
+        """EOS of the background-equivalent noninteracting DE model.
+
+        ``dm0`` is the reference model's present CDM density divided by
+        today's critical density (Omega_c0_bar), excluding baryons.
+        It is independent of this model's Omega_dm0 and defaults to 0.3.
+        Reference CDM evolves as dm0*rho_crit*a**(-3). Matching the total
+        dark-sector density and pressure gives w*rho_L/rho_DE_rec;
+        for interacting vacuum (w=-1), this is -rho_L/rho_DE_rec.
+
+        """
+        a = np.asarray(a, dtype=float)
+        rho_L = self.Rho_L(a)
+        rho_rec = self.Rho_dm(a) + rho_L - dm0*self.rho_crit*a**(-3)
+        return self.w*rho_L/rho_rec
+
     #==========================================================================
     def Q(self,a):
         ans = 3.0*np.sqrt(self.Hsquare(a))*(self.k1*self.Rho_L(a) + self.k2*self.Rho_dm(a));
